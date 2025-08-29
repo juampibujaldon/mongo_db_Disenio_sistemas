@@ -1,21 +1,18 @@
 services:
   mongodb:
+    image: mongodb/mongodb-community-server:7.0.21-ubuntu2204
     container_name: mongodb-servidor
-    image: mongodb/mongodb-community-server:latest
-    restart: unless-stopped
     ports:
       - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGODB_INITDB_ROOT_USERNAME=${ROOT_USERNAME}
+      - MONGODB_INITDB_ROOT_PASSWORD=${ROOT_PASSWORD}
       - MONGO_APP_USER=${MONGO_APP_USER}
       - MONGO_APP_PASSWORD=${MONGO_APP_PASSWORD}
     volumes:
-      - ./mongo/data:/data/db
-      - ./mongo/mongo-init:/docker-entrypoint-initdb.d
-    networks:
-      - app-network
+      - mongo_data:/data/db
+      - ./mongo/mongo-init:/docker-entrypoint-initdb.d:ro
+    
 
-networks:
-  app-network:
-    external: true
+volumes:
+  mongo_data:
